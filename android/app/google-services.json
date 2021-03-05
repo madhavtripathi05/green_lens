@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "593979993073",
+    "project_id": "green-lens",
+    "storage_bucket": "green-lens.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593979993073:android:4f29ababcca38b9641f250",
+        "android_client_info": {
+          "package_name": "com.madhavcodes.green_lens"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593979993073-qdh2gve2sul2uhk5k94q56scopik1181.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.madhavcodes.green_lens",
+            "certificate_hash": "00d22de58c57c11aee059ce5a53c449ac8c3f3a1"
+          }
+        },
+        {
+          "client_id": "593979993073-4knohv1hsmsvhh6pp5rrn2uiqf57j7g7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4dTXYTjUjqBpCuSC3AXX6PPvt6hwVkck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593979993073-4knohv1hsmsvhh6pp5rrn2uiqf57j7g7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "593979993073-ajjf7ce4qb16olf8brrjruttrohdtfmm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.madhavcodes.greenLens"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

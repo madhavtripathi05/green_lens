@@ -1,20 +1,14 @@
 import 'package:get/get.dart';
 
+import '../views/community_view.dart';
+import '../views/dashboard_view.dart';
+import '../views/user_profile.dart';
+
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
-
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  static final to = Get.find<HomeController>();
+  RxInt index = 0.obs;
+  var views = [Dashboard(), Community(), UserProfile()];
+  void changeIndex(int newIndex) {
+    index.value = newIndex;
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {}
-  void increment() => count.value++;
 }
