@@ -41,7 +41,7 @@ class Dashboard extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: Container(
                     width: 60,
-                    height: 110,
+                    height: 100,
                     color: Get.isDarkMode
                         ? Get.theme.scaffoldBackgroundColor
                         : Colors.white,
@@ -58,9 +58,10 @@ class Dashboard extends StatelessWidget {
           ),
           CropCard(),
           Card(
+            elevation: 5,
             margin: EdgeInsets.all(20),
             child: Container(
-              height: 200,
+              height: 230,
               child: Column(
                 children: [
                   Text(
@@ -76,36 +77,81 @@ class Dashboard extends StatelessWidget {
                       Column(
                         children: [
                           Icon(
-                            FlutterIcons.camera_ant,
-                            size: 40,
+                            FlutterIcons.picture_ant,
+                            size: 30,
+                            color: Colors.lightBlue,
                           ),
-                          Text('Take a Picture')
+                          Text(
+                            'Select a Photo',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.lightBlue,
+                            ),
+                          )
                         ],
                       ),
                       Column(
                         children: [
-                          Icon(
-                            FlutterIcons.details_mco,
-                            size: 40,
-                          ),
-                          Text('See Diagnosis')
+                          Icon(FlutterIcons.details_mco,
+                              size: 30, color: Colors.deepPurpleAccent),
+                          Text(
+                            'See Diagnosis',
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.deepPurpleAccent),
+                          )
                         ],
                       ),
                       Column(
                         children: [
-                          Icon(
-                            FlutterIcons.medicinebox_ant,
-                            size: 40,
-                          ),
-                          Text('Get Medicine')
+                          Icon(FlutterIcons.medicinebox_ant,
+                              size: 30, color: Colors.greenAccent[700]),
+                          Text(
+                            'Get Medicine',
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.greenAccent[700]),
+                          )
                         ],
                       ),
                     ],
                   ).paddingOnly(bottom: 20),
                   OutlinedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(FlutterIcons.camera_control_mco),
-                      label: Text('Take a picture'))
+                    style: ButtonStyle(overlayColor:
+                        MaterialStateProperty.resolveWith<Color>((states) {
+                      if (states.contains(MaterialState.pressed)) {
+                        return Colors.green.withOpacity(0.4);
+                      }
+                      return Colors.transparent;
+                    })),
+                    onPressed: () {
+                      Get.toNamed('/camera');
+                    },
+                    icon: Icon(
+                      FlutterIcons.camera_enhance_mco,
+                      color: Colors.green,
+                    ),
+                    label: Text(
+                      'Take a picture',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
+                  OutlinedButton.icon(
+                    style: ButtonStyle(overlayColor:
+                        MaterialStateProperty.resolveWith<Color>((states) {
+                      if (states.contains(MaterialState.pressed)) {
+                        return Colors.lightGreen.withOpacity(0.4);
+                      }
+                      return Colors.transparent;
+                    })),
+                    onPressed: () {},
+                    icon: Icon(
+                      FlutterIcons.photo_album_mdi,
+                      color: Colors.lightGreen,
+                    ),
+                    label: Text(
+                      'Choose from gallery',
+                      style: TextStyle(color: Colors.lightGreen),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -131,14 +177,18 @@ class CropCard extends StatelessWidget {
               color: value.withOpacity(0.6),
               child: Row(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
+                  Card(
+                    elevation: 5,
+                    color: Get.isDarkMode
+                        ? Get.theme.dialogBackgroundColor
+                        : Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                     child: InkWell(
+                      splashColor:
+                          dc.fromHex(dc.selected.value.color).withOpacity(0.3),
                       onTap: () {},
                       child: Container(
-                        color: Get.isDarkMode
-                            ? Get.theme.scaffoldBackgroundColor
-                            : Colors.white,
                         height: 100,
                         width: Get.width * 0.4,
                         child: Column(
@@ -149,7 +199,7 @@ class CropCard extends StatelessWidget {
                               color: value,
                             ),
                             Text(
-                              'This is some text',
+                              'Heal ${dc.selected.value.title}',
                               style: TextStyle(color: value),
                             )
                           ],
@@ -157,26 +207,33 @@ class CropCard extends StatelessWidget {
                       ),
                     ),
                   ).paddingOnly(left: 20),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      color: Get.isDarkMode
-                          ? Get.theme.scaffoldBackgroundColor
-                          : Colors.white,
-                      height: 100,
-                      width: Get.width * 0.4,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.access_alarm,
-                            color: value,
-                          ),
-                          Text(
-                            'This is another text',
-                            style: TextStyle(color: value),
-                          )
-                        ],
+                  Card(
+                    elevation: 5,
+                    color: Get.isDarkMode
+                        ? Get.theme.dialogBackgroundColor
+                        : Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: InkWell(
+                      splashColor:
+                          dc.fromHex(dc.selected.value.color).withOpacity(0.3),
+                      onTap: () {},
+                      child: Container(
+                        height: 100,
+                        width: Get.width * 0.4,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              FlutterIcons.more_mco,
+                              color: value,
+                            ),
+                            Text(
+                              'Get more details',
+                              style: TextStyle(color: value),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ).paddingOnly(left: 20),
@@ -206,7 +263,6 @@ class CropWidget extends StatelessWidget {
               InkWell(
                 onTap: () => dc.selected.value = crop,
                 child: Stack(
-                  fit: StackFit.passthrough,
                   children: [
                     Container(
                       color: dc.selected.value == crop
@@ -232,7 +288,7 @@ class CropWidget extends StatelessWidget {
                             topRight: Radius.circular(30)),
                         child: Container(
                           width: 100,
-                          height: 10,
+                          height: 10.13,
                           color: dc.selected.value == crop
                               ? value.withOpacity(0.6)
                               : null,

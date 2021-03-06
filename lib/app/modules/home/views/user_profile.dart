@@ -90,7 +90,7 @@ class UserProfile extends StatelessWidget {
                   ListTile(
                     leading: Icon(FlutterIcons.user_ant),
                     title: !pc.editing.value
-                        ? Text(pc.currentUser.value.displayName ?? 'Unknown')
+                        ? Text(pc?.currentUser?.value?.displayName ?? 'Unknown')
                         : TextFormField(
                             controller: pc.nameController,
                             validator: pc.passValidator,

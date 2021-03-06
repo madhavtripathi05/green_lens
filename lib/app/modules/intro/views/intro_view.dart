@@ -13,41 +13,43 @@ class IntroView extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
-          child: Column(
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                height: 190,
-              ).paddingOnly(top: 40),
-              SizedBox.fromSize(
-                size: Size.fromHeight(Get.height * 0.65),
-                child: PageTransformer(
-                  pageViewBuilder: (context, visibilityResolver) {
-                    return PageView.builder(
-                      controller: ic.pageController,
-                      itemCount: ic.sampleItems.length,
-                      itemBuilder: (context, index) {
-                        final item = ic.sampleItems[index];
-                        ic.index.value = index;
-                        final pageVisibility =
-                            visibilityResolver.resolvePageVisibility(index);
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Image.asset(
+                  'assets/images/logo.png',
+                  height: 150,
+                ).paddingOnly(top: 30),
+                SizedBox.fromSize(
+                  size: Size.fromHeight(Get.height * 0.65),
+                  child: PageTransformer(
+                    pageViewBuilder: (context, visibilityResolver) {
+                      return PageView.builder(
+                        controller: ic.pageController,
+                        itemCount: ic.sampleItems.length,
+                        itemBuilder: (context, index) {
+                          final item = ic.sampleItems[index];
+                          ic.index.value = index;
+                          final pageVisibility =
+                              visibilityResolver.resolvePageVisibility(index);
 
-                        return IntroPageItem(
-                          item: item,
-                          pageVisibility: pageVisibility,
-                        );
-                      },
-                    );
-                  },
+                          return IntroPageItem(
+                            item: item,
+                            pageVisibility: pageVisibility,
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-              SmoothPageIndicator(
-                      controller: ic.pageController,
-                      count: ic.sampleItems.length,
-                      effect: JumpingDotEffect(activeDotColor: Colors.green),
-                      onDotClicked: (index) {})
-                  .paddingOnly(top: 20)
-            ],
+                SmoothPageIndicator(
+                        controller: ic.pageController,
+                        count: ic.sampleItems.length,
+                        effect: JumpingDotEffect(activeDotColor: Colors.green),
+                        onDotClicked: (index) {})
+                    .paddingOnly(top: 20)
+              ],
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
