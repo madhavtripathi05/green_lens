@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:green_lens/app/models/post.dart';
 
 class DBService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -42,12 +43,12 @@ class DBService {
     return firestore.collection(collectionPath).snapshots();
   }
 
-  // Stream<QuerySnapshot> getLotteries() => getStream('lotteries');
+  Stream<QuerySnapshot> getPosts() => getStream('posts');
 
-  // Future<List<Lottery>> getLotteriesList() async {
-  // final snapshots = await firestore.collection('lotteries').get();
-  // return snapshots.docs.map((doc) => Lottery.fromJson(doc.data())).toList();
-  // }
+  Future<List<Post>> getPostsList() async {
+    final snapshots = await firestore.collection('posts').get();
+    return snapshots.docs.map((doc) => Post.fromJson(doc.data())).toList();
+  }
 
   Future<void> upsert(String path, Map<String, dynamic> data) async {
     assert(path.isNotEmpty && data.isNotEmpty);

@@ -1,14 +1,14 @@
 import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 
-import '../views/community_view.dart';
+import '../../community/views/community_view.dart';
 import '../views/dashboard_view.dart';
 import '../views/user_profile.dart';
 
 class HomeController extends GetxController {
   static final to = Get.find<HomeController>();
   RxInt index = 0.obs;
-  var views = [Dashboard(), Community(), UserProfile()];
+  var views = [Dashboard(), CommunityView(), UserProfile()];
   void changeIndex(int newIndex) {
     index.value = newIndex;
   }

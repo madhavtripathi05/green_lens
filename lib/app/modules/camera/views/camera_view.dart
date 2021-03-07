@@ -65,7 +65,7 @@ class _CameraWidgetState extends State<CameraWidget>
   @override
   void initState() {
     super.initState();
-    onNewCameraSelected(hc.cameras[0]);
+    if (hc.cameras.length > 0) onNewCameraSelected(hc.cameras[0]);
     WidgetsBinding.instance?.addObserver(this);
   }
 
@@ -136,7 +136,8 @@ class _CameraWidgetState extends State<CameraWidget>
 
     if (cameraController == null || !cameraController.value.isInitialized) {
       return const Text(
-        'Select Camera',
+        'No camera found please try selecting files from gallery!',
+        textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.green,
           fontSize: 24.0,
