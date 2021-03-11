@@ -19,10 +19,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      // Initialize FlutterFire:
       future: _initialization,
       builder: (context, snapshot) {
-        // Check for errors
         if (snapshot.hasError) {
           return Center(
             child: Text(
@@ -30,7 +28,6 @@ class App extends StatelessWidget {
           );
         }
 
-        // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
           return GetMaterialApp(
             title: 'Lottery App',

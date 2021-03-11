@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:green_lens/app/models/post.dart';
+import 'package:http/http.dart' as http;
 
 class DBService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -58,5 +60,26 @@ class DBService {
   Future<void> delete(String path) async {
     assert(path.isNotEmpty);
     await firestore.doc(path).delete();
+  }
+
+  ///* Flask API methods
+
+  Future<String> predict(File image, String crop) async {
+    // final data = jsonEncode({"image": image});
+    // final res = await http
+    //     .post(Uri.http('localhost:5000', '/api/$crop-prediction'), body: data);
+    // open a byte stream
+
+    var stream = new http.ByteStream(image.openRead());
+    stream.cast();
+    var length = await image.length();
+    var uri = Uri.parse('http://localhost:5000/api/$crop-prediction');
+    var request = new http.MultipartRequest('POST', uri);
+    var multipartFile = new http.MultipartFile('file', stream, length,
+        filename: basename(image.path));
+    request.files.add(multipartFile);
+    var response = await request.send();
+    String res = await response.stream.bytesToString();
+    return res;
   }
 }

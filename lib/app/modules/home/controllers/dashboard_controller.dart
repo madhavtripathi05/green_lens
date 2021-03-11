@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_lens/app/models/crop.dart';
+import 'package:green_lens/app/services/db.dart';
+import 'package:image_picker/image_picker.dart';
 
 final crops = [
   Crop(
@@ -8,16 +13,6 @@ final crops = [
       title: 'Apple',
       imageUrl: 'assets/images/apple.png',
       color: '#fa1e0e'),
-  Crop(
-      id: 'banana',
-      title: 'Banana',
-      imageUrl: 'assets/images/banana.png',
-      color: '#f4d160'),
-  Crop(
-      id: 'blueberry',
-      title: 'Blueberry',
-      imageUrl: 'assets/images/blueberry.png',
-      color: '#4f86f7'),
   Crop(
       id: 'cherry',
       title: 'Cherry',
@@ -27,24 +22,19 @@ final crops = [
       id: 'corn',
       title: 'Corn',
       imageUrl: 'assets/images/corn.png',
-      color: '#fbec5d'),
+      color: '#90ee90'),
   Crop(
       id: 'grape',
       title: 'Grape',
       imageUrl: 'assets/images/grape.png',
       color: '#61b15a'),
   Crop(
-      id: 'orange',
-      title: 'Orange',
-      imageUrl: 'assets/images/orange.png',
-      color: '#ffa500'),
-  Crop(
       id: 'peach',
       title: 'Peach',
       imageUrl: 'assets/images/peach.png',
       color: '#ff886c'),
   Crop(
-      id: 'bell_pepper',
+      id: 'pepper',
       title: 'Pepper',
       imageUrl: 'assets/images/bell_pepper.png',
       color: '#fa1e0e'),
@@ -53,16 +43,6 @@ final crops = [
       title: 'Potato',
       imageUrl: 'assets/images/potato.png',
       color: '#bd9354'),
-  Crop(
-      id: 'soybean',
-      title: 'Soybean',
-      imageUrl: 'assets/images/soybean.png',
-      color: '#6f634b'),
-  Crop(
-      id: 'squash',
-      title: 'Squash',
-      imageUrl: 'assets/images/squash.png',
-      color: '#f2ab15'),
   Crop(
       id: 'strawberry',
       title: 'Strawberry',
@@ -79,6 +59,14 @@ class DashboardController extends GetxController {
   static final to = Get.find<DashboardController>();
   Rx<Crop> selected = crops.first.obs;
 
+  RxBool imageUploaded = false.obs;
+  RxBool submitting = false.obs;
+  RxBool imageSelected = false.obs;
+
+  RxString results = ''.obs;
+
+  File image;
+
   ColorTween get colorTween => ColorTween(
       begin: fromHex(selected.value.color), end: fromHex(selected.value.color));
 
@@ -87,5 +75,63 @@ class DashboardController extends GetxController {
     if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
     buffer.write(hexString.replaceFirst('#', ''));
     return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
+  Future getImage(bool gallery) async {
+    ImagePicker picker = ImagePicker();
+    PickedFile pickedFile;
+    if (gallery) {
+      pickedFile = await picker.getImage(
+          source: ImageSource.gallery, maxHeight: 224, maxWidth: 224);
+    } else {
+      pickedFile = await picker.getImage(
+          source: ImageSource.camera, maxHeight: 224, maxWidth: 224);
+    }
+    if (pickedFile != null) {
+      image = File(pickedFile.path); // Use if you only need a single picture
+      imageSelected.value = true;
+      await predictFromImage();
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  void onChanged(Crop crop) => selected.value = crop;
+
+  void generateDialog(bool gallery) => Get.defaultDialog(
+      title: "Select a crop to heal",
+      content: Container(
+        height: Get.height * 0.5,
+        width: Get.width * 0.6,
+        child: ListView.builder(
+            itemCount: crops.length,
+            itemBuilder: (ctx, idx) {
+              return Obx(() => RadioListTile<Crop>(
+                  value: crops[idx],
+                  title: Row(
+                    children: [
+                      Text(crops[idx].title),
+                      Image.asset(crops[idx].imageUrl, height: 50),
+                    ],
+                  ),
+                  groupValue: selected.value,
+                  onChanged: onChanged));
+            }),
+      ),
+      confirm: IconButton(
+          icon: Icon(Icons.check),
+          onPressed: () async {
+            Get.back();
+            await getImage(gallery);
+          }));
+
+  Future predictFromImage() async {
+    print('predicting');
+    submitting.value = true;
+
+    results.value = jsonDecode(
+        await DBService().predict(image, selected.value.id))['prediction'];
+    submitting.value = false;
+    print(results.value);
   }
 }
