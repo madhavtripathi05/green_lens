@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 
 import '../../community/views/community_view.dart';
@@ -13,12 +12,9 @@ class HomeController extends GetxController {
     index.value = newIndex;
   }
 
-  List<CameraDescription> cameras;
   @override
   void onInit() async {
-    try {
-      cameras = await availableCameras();
-    } catch (e) {
+    try {} catch (e) {
       print(e);
     }
     super.onInit();

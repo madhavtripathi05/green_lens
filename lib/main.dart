@@ -30,7 +30,7 @@ class App extends StatelessWidget {
 
         if (snapshot.connectionState == ConnectionState.done) {
           return GetMaterialApp(
-            title: 'Lottery App',
+            title: 'Green Lens',
             initialRoute: AppPages.INITIAL,
             getPages: AppPages.routes,
             defaultTransition: Transition.cupertino,

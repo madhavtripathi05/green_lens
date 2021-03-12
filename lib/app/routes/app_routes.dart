@@ -7,7 +7,6 @@ abstract class Routes {
   static const REGISTRATION = _Paths.REGISTRATION;
   static const INTRO = _Paths.INTRO;
   static const SPLASH = _Paths.SPLASH;
-  static const CAMERA = _Paths.CAMERA;
   static const COMMUNITY = _Paths.COMMUNITY;
   static const NEW_POST = _Paths.NEW_POST;
 }
@@ -18,7 +17,6 @@ abstract class _Paths {
   static const REGISTRATION = '/registration';
   static const INTRO = '/intro';
   static const SPLASH = '/splash';
-  static const CAMERA = '/camera';
   static const COMMUNITY = '/community';
   static const NEW_POST = '/new-post';
 }

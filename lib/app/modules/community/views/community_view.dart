@@ -17,12 +17,18 @@ class CommunityView extends GetView<CommunityController> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Obx(
-          () => ListView(
+          () => Stack(
             children: [
-              SearchBar().paddingAll(10),
-              if (cc.posts.length > 0)
-                ...cc.posts.map((p) => PostCard(p)).toList(),
-              if (cc.posts.length == 0) Center(child: Text('No posts found!'))
+              ListView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  SearchBar().paddingAll(10),
+                  if (cc.posts.length > 0)
+                    ...cc.posts.map((p) => PostCard(p)).toList().reversed,
+                  if (cc.posts.length == 0)
+                    Center(child: Text('No posts found!')),
+                ],
+              ),
             ],
           ),
         ),
@@ -116,6 +122,7 @@ class PostCard extends StatelessWidget {
             CachedNetworkImage(
               imageUrl: post.imageUrl,
               width: Get.width,
+              fit: BoxFit.fitWidth,
             ),
           Text('${post.title}').paddingAll(8),
           Row(
@@ -172,7 +179,7 @@ class PostCard extends StatelessWidget {
           if (post.comments.length > 0)
             Container(
               height: 50,
-              child: ListView(children: [
+              child: ListView(physics: BouncingScrollPhysics(), children: [
                 ...post.comments.map(
                   (c) => Row(
                     children: [

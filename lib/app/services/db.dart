@@ -65,15 +65,14 @@ class DBService {
   ///* Flask API methods
 
   Future<String> predict(File image, String crop) async {
-    // final data = jsonEncode({"image": image});
-    // final res = await http
-    //     .post(Uri.http('localhost:5000', '/api/$crop-prediction'), body: data);
-    // open a byte stream
-
     var stream = new http.ByteStream(image.openRead());
     stream.cast();
+    String temp = '';
+    if (crop == 'potato' || crop == 'strawberry' || crop == 'tomato')
+      temp = '-1';
+    if (crop == 'apple' || crop == 'corn' || crop == 'grape') temp = '-2';
     var length = await image.length();
-    var uri = Uri.parse('http://localhost:5000/api/$crop-prediction');
+    var uri = Uri.parse('https://green-lens$temp.herokuapp.com/predict/$crop');
     var request = new http.MultipartRequest('POST', uri);
     var multipartFile = new http.MultipartFile('file', stream, length,
         filename: basename(image.path));

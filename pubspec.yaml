@@ -25,7 +25,6 @@ dependencies:
     sdk: flutter
   animations: ^2.0.0
   cached_network_image: 3.0.0-nullsafety
-  camera: ^0.8.0
   cloud_firestore: ^1.0.0
   cupertino_icons: ^1.0.2
   firebase_auth: ^1.0.0
@@ -37,7 +36,6 @@ dependencies:
   get: 3.26.0
   google_fonts: ^2.0.0
   google_sign_in: ^5.0.0
-  image: ^3.0.1
   image_picker: ^0.7.2
   permission_handler: ^5.1.0+2
   share: ^2.0.0
@@ -50,6 +48,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: '^0.9.0'
+
+flutter_icons:
+  android: 'launcher_icon'
+  ios: true
+  image_path: 'assets/images/logo.png'
 
 dependency_overrides:
   plugin_platform_interface: '>=2.0.0'

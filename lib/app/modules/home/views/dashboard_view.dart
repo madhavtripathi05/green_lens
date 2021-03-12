@@ -15,13 +15,14 @@ class Dashboard extends StatelessWidget {
       backgroundColor:
           Get.isDarkMode ? Get.theme.scaffoldBackgroundColor : Colors.white,
       body: ListView(
+        physics: BouncingScrollPhysics(),
         children: [
           Text(
             'Green Lens',
             style: TextStyle(
               fontFamily: GoogleFonts.nunito().fontFamily,
               fontWeight: FontWeight.bold,
-              fontSize: 28,
+              fontSize: 24,
             ),
           ).paddingOnly(left: 20, bottom: 10),
           CropsAnimatedList(),
@@ -36,7 +37,7 @@ class Dashboard extends StatelessWidget {
 
 class PredictionCard extends StatelessWidget {
   final spinkit = SpinKitPulse(
-    color: Colors.black54,
+    color: Colors.lightGreen.withOpacity(0.8),
     size: 50.0,
   );
   @override
@@ -59,7 +60,7 @@ class PredictionCard extends StatelessWidget {
                       ),
                     ).paddingOnly(top: 5, bottom: 10),
                     Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           if (dc.image != null)
                             ClipRRect(
@@ -67,6 +68,8 @@ class PredictionCard extends StatelessWidget {
                               child: Image.file(
                                 dc.image,
                                 height: 150,
+                                width: 150,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           Column(
@@ -75,7 +78,7 @@ class PredictionCard extends StatelessWidget {
                               Text('predicting, please wait!')
                             ],
                           )
-                        ]).paddingOnly(left: 10, bottom: 20, right: 20)
+                        ]).paddingOnly(bottom: 20)
                   ])
                 : Column(
                     children: [
@@ -87,7 +90,7 @@ class PredictionCard extends StatelessWidget {
                         ),
                       ).paddingOnly(top: 5, bottom: 10),
                       Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             if (dc.image != null)
                               ClipRRect(
@@ -95,12 +98,17 @@ class PredictionCard extends StatelessWidget {
                                 child: Image.file(
                                   dc.image,
                                   height: 150,
+                                  width: 150,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             Column(
                               children: [
                                 Text(
-                                  'Condition of ${dc.selected.value.title} is',
+                                  dc.results.value == ''
+                                      ? 'Enter a valid image'
+                                      : 'Condition of ${dc.selected.value.title == 'Strawberry' ? 'crop' : dc.selected.value.title} is',
+                                  softWrap: true,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -112,11 +120,7 @@ class PredictionCard extends StatelessWidget {
                                 ),
                                 if (dc.results.value != '')
                                   Text(
-                                    !dc.results.value
-                                            .toLowerCase()
-                                            .contains('healthy')
-                                        ? dc.results.value.split(' ')[1] ?? ''
-                                        : dc.results.value,
+                                    dc.results.value,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
@@ -127,33 +131,32 @@ class PredictionCard extends StatelessWidget {
                                             : Colors.redAccent),
                                   ).paddingOnly(bottom: 10),
                                 if (!dc.results.value
-                                    .toLowerCase()
-                                    .contains('healthy'))
+                                        .toLowerCase()
+                                        .contains('healthy') &&
+                                    dc.results.value != '')
                                   OutlinedButton.icon(
                                     style: ButtonStyle(overlayColor:
                                         MaterialStateProperty.resolveWith<
                                             Color>((states) {
                                       if (states
                                           .contains(MaterialState.pressed)) {
-                                        return Colors.deepPurpleAccent
+                                        return Colors.deepOrangeAccent
                                             .withOpacity(0.4);
                                       }
                                       return Colors.transparent;
                                     })),
                                     onPressed: () {},
-                                    icon: Icon(
-                                      FlutterIcons.healing_mdi,
-                                      color: Colors.deepPurpleAccent,
-                                    ),
+                                    icon: Icon(FlutterIcons.healing_mdi,
+                                        color: Colors.deepOrangeAccent),
                                     label: Text(
                                       'Get Remedies',
                                       style: TextStyle(
-                                          color: Colors.deepPurpleAccent),
+                                          color: Colors.deepOrangeAccent),
                                     ),
                                   ),
                               ],
                             ),
-                          ]).paddingOnly(bottom: 20, left: 20, right: 30)
+                          ]).paddingOnly(bottom: 20)
                     ],
                   ),
           ),
@@ -206,11 +209,11 @@ class CenterCard extends StatelessWidget {
                 Column(
                   children: [
                     Icon(FlutterIcons.details_mco,
-                        size: 30, color: Colors.deepPurpleAccent),
+                        size: 30, color: Colors.deepOrangeAccent),
                     Text(
                       'See Diagnosis',
                       style: TextStyle(
-                          fontSize: 12, color: Colors.deepPurpleAccent),
+                          fontSize: 12, color: Colors.deepOrangeAccent),
                     )
                   ],
                 ),
@@ -286,6 +289,7 @@ class CropsAnimatedList extends StatelessWidget {
       child: Stack(
         children: [
           ListView.builder(
+            physics: BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemCount: crops.length + 1,
             itemBuilder: (_, i) => i == crops.length
@@ -351,7 +355,7 @@ class CropCard extends StatelessWidget {
                               color: value,
                             ),
                             Text(
-                              'Heal ${dc.selected.value.title}',
+                              'Diagnose ${dc.selected.value.title}',
                               style: TextStyle(color: value),
                             )
                           ],
@@ -413,7 +417,10 @@ class CropWidget extends StatelessWidget {
           return Column(
             children: [
               InkWell(
-                onTap: () => dc.selected.value = crop,
+                onTap: () {
+                  dc.selected.value = crop;
+                  dc.image = null;
+                },
                 child: Stack(
                   children: [
                     Container(
@@ -440,7 +447,7 @@ class CropWidget extends StatelessWidget {
                             topRight: Radius.circular(30)),
                         child: Container(
                           width: 100,
-                          height: 10.13,
+                          height: 10.14,
                           color: dc.selected.value == crop
                               ? value.withOpacity(0.6)
                               : null,

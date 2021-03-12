@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
 
-import 'package:green_lens/app/modules/camera/bindings/camera_binding.dart';
-import 'package:green_lens/app/modules/camera/views/camera_view.dart';
 import 'package:green_lens/app/modules/community/bindings/community_binding.dart';
 import 'package:green_lens/app/modules/community/views/community_view.dart';
 import 'package:green_lens/app/modules/home/bindings/home_binding.dart';
@@ -47,11 +45,6 @@ class AppPages {
       name: _Paths.SPLASH,
       page: () => SplashView(),
       binding: SplashBinding(),
-    ),
-    GetPage(
-      name: _Paths.CAMERA,
-      page: () => CameraView(),
-      binding: CameraBinding(),
     ),
     GetPage(
       name: _Paths.COMMUNITY,

@@ -22,7 +22,7 @@ final crops = [
       id: 'corn',
       title: 'Corn',
       imageUrl: 'assets/images/corn.png',
-      color: '#90ee90'),
+      color: '#FBEC5D'),
   Crop(
       id: 'grape',
       title: 'Grape',
@@ -36,7 +36,7 @@ final crops = [
   Crop(
       id: 'pepper',
       title: 'Pepper',
-      imageUrl: 'assets/images/bell_pepper.png',
+      imageUrl: 'assets/images/pepper.png',
       color: '#fa1e0e'),
   Crop(
       id: 'potato',
@@ -88,7 +88,7 @@ class DashboardController extends GetxController {
           source: ImageSource.camera, maxHeight: 224, maxWidth: 224);
     }
     if (pickedFile != null) {
-      image = File(pickedFile.path); // Use if you only need a single picture
+      image = File(pickedFile.path);
       imageSelected.value = true;
       await predictFromImage();
     } else {
@@ -104,6 +104,7 @@ class DashboardController extends GetxController {
         height: Get.height * 0.5,
         width: Get.width * 0.6,
         child: ListView.builder(
+            physics: BouncingScrollPhysics(),
             itemCount: crops.length,
             itemBuilder: (ctx, idx) {
               return Obx(() => RadioListTile<Crop>(

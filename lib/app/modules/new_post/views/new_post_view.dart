@@ -12,7 +12,10 @@ class NewPostView extends StatelessWidget {
           title: Text('New Post'),
           actions: [
             nc.submitting.value
-                ? CircularProgressIndicator.adaptive()
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator.adaptive(),
+                  )
                 : TextButton.icon(
                     label: Text(
                       'Add',
@@ -31,6 +34,7 @@ class NewPostView extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(18.0),
             child: ListView(
+              physics: BouncingScrollPhysics(),
               children: [
                 if (nc.imageSelected.value)
                   Column(
