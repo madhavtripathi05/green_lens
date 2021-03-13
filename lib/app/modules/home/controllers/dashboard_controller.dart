@@ -58,6 +58,7 @@ final crops = [
 class DashboardController extends GetxController {
   static final to = Get.find<DashboardController>();
   Rx<Crop> selected = crops.first.obs;
+  final scrollController = ScrollController();
 
   RxBool imageUploaded = false.obs;
   RxBool submitting = false.obs;
@@ -96,8 +97,6 @@ class DashboardController extends GetxController {
     }
   }
 
-  void onChanged(Crop crop) => selected.value = crop;
-
   void generateDialog(bool gallery) => Get.defaultDialog(
       title: "Select a crop to heal",
       content: Container(
@@ -107,16 +106,23 @@ class DashboardController extends GetxController {
             physics: BouncingScrollPhysics(),
             itemCount: crops.length,
             itemBuilder: (ctx, idx) {
-              return Obx(() => RadioListTile<Crop>(
-                  value: crops[idx],
-                  title: Row(
-                    children: [
-                      Text(crops[idx].title),
-                      Image.asset(crops[idx].imageUrl, height: 50),
-                    ],
-                  ),
-                  groupValue: selected.value,
-                  onChanged: onChanged));
+              return Obx(
+                () => RadioListTile<Crop>(
+                    value: crops[idx],
+                    title: Row(
+                      children: [
+                        Text(crops[idx].title),
+                        Image.asset(crops[idx].imageUrl, height: 50),
+                      ],
+                    ),
+                    groupValue: selected.value,
+                    onChanged: (crop) {
+                      selected.value = crop;
+                      scrollController.animateTo(95.0 * idx,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.decelerate);
+                    }),
+              );
             }),
       ),
       confirm: IconButton(

@@ -73,6 +73,7 @@ class PredictionCard extends StatelessWidget {
                               ),
                             ),
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               spinkit,
                               Text('predicting, please wait!')
@@ -239,7 +240,6 @@ class CenterCard extends StatelessWidget {
                 return Colors.transparent;
               })),
               onPressed: () {
-                // Get.toNamed('/camera');
                 dc.generateDialog(false);
               },
               icon: Icon(
@@ -289,12 +289,13 @@ class CropsAnimatedList extends StatelessWidget {
       child: Stack(
         children: [
           ListView.builder(
+            controller: dc.scrollController,
             physics: BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemCount: crops.length + 1,
             itemBuilder: (_, i) => i == crops.length
                 ? SizedBox(width: 60)
-                : CropWidget(crop: crops[i]),
+                : CropWidget(crop: crops[i], index: i),
           ),
           Align(
             alignment: Alignment.centerRight,
@@ -343,7 +344,9 @@ class CropCard extends StatelessWidget {
                     child: InkWell(
                       splashColor:
                           dc.fromHex(dc.selected.value.color).withOpacity(0.3),
-                      onTap: () {},
+                      onTap: () async {
+                        await dc.getImage(true);
+                      },
                       child: Container(
                         height: 100,
                         width: Get.width * 0.4,
@@ -405,8 +408,9 @@ class CropCard extends StatelessWidget {
 
 class CropWidget extends StatelessWidget {
   final Crop crop;
+  final int index;
 
-  const CropWidget({Key key, this.crop}) : super(key: key);
+  CropWidget({Key key, this.crop, this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -418,6 +422,9 @@ class CropWidget extends StatelessWidget {
             children: [
               InkWell(
                 onTap: () {
+                  dc.scrollController.animateTo(95.0 * index,
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.decelerate);
                   dc.selected.value = crop;
                   dc.image = null;
                 },
@@ -429,9 +436,17 @@ class CropWidget extends StatelessWidget {
                           : null,
                       height: 100,
                       width: 120,
-                      child: Image.asset(
-                        crop.imageUrl,
-                        fit: BoxFit.cover,
+                      child: Container(
+                        margin: EdgeInsets.all(10),
+                        child: CircleAvatar(
+                          backgroundColor: Get.isDarkMode
+                              ? Get.theme.scaffoldBackgroundColor
+                              : Colors.white,
+                          child: Image.asset(
+                            crop.imageUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
                     Container(
