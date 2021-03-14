@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:green_lens/app/models/crop.dart';
 import 'package:green_lens/app/modules/home/controllers/dashboard_controller.dart';
 import 'package:get/get.dart';
+import 'package:green_lens/app/modules/home/views/widgets/weather_widget.dart';
 
 var dc = DashboardController.to;
 
@@ -29,9 +30,24 @@ class Dashboard extends StatelessWidget {
           CropCard(),
           CenterCard(),
           PredictionCard(),
+          WeatherCard()
         ],
       ),
     );
+  }
+}
+
+class WeatherCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => Visibility(
+        visible: dc.weatherLoaded.value,
+        child: Card(
+            elevation: 5,
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: Container(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: WeatherWidget(weather: dc.weather.value)))));
   }
 }
 

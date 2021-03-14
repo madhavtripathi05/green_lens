@@ -2,10 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:green_lens/app/models/crop.dart';
+import 'package:green_lens/app/models/weather.dart';
 import 'package:green_lens/app/services/db.dart';
+import 'package:green_lens/app/services/weather_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 final crops = [
   Crop(
@@ -57,16 +61,23 @@ final crops = [
 
 class DashboardController extends GetxController {
   static final to = Get.find<DashboardController>();
-  Rx<Crop> selected = crops.first.obs;
   final scrollController = ScrollController();
+
+  Rx<Crop> selected = crops.first.obs;
 
   RxBool imageUploaded = false.obs;
   RxBool submitting = false.obs;
   RxBool imageSelected = false.obs;
+  RxBool weatherLoaded = false.obs;
 
   RxString results = ''.obs;
+  RxString cityName = ''.obs;
+
+  Rx<Weather> weather = Weather().obs;
 
   File image;
+
+  WeatherApi weatherApi = WeatherApi();
 
   ColorTween get colorTween => ColorTween(
       begin: fromHex(selected.value.color), end: fromHex(selected.value.color));
@@ -140,5 +151,82 @@ class DashboardController extends GetxController {
         await DBService().predict(image, selected.value.id))['prediction'];
     submitting.value = false;
     print(results.value);
+  }
+
+  void _showLocationDeniedDialog() {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: Colors.white,
+        title: Text('Location is disabled :(',
+            style: TextStyle(color: Colors.black)),
+        actions: <Widget>[
+          TextButton(
+            child: Text(
+              'Enable from settings',
+              style: TextStyle(color: Colors.green, fontSize: 16),
+            ),
+            onPressed: () async {
+              await openAppSettings();
+              Get.back();
+            },
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+  }
+
+  Future<void> fetchWeatherWithLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      // return Future.error('Location services are disabled.');
+      _showLocationDeniedDialog();
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        _showLocationDeniedDialog();
+      }
+
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        _showLocationDeniedDialog();
+      }
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    final currentLocation = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    var city = await weatherApi.getCityNameFromLocation(
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude);
+    cityName.value = city;
+    print(cityName.value);
+
+    weather.value = await weatherApi.getWeatherData(city);
+
+    weather.value.forecast = await weatherApi.getForecast(city);
+    if (!weather.value.isBlank || !cityName.isBlank) weatherLoaded.value = true;
+  }
+
+  @override
+  void onInit() async {
+    await fetchWeatherWithLocation();
+    super.onInit();
   }
 }

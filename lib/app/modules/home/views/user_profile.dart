@@ -115,38 +115,29 @@ class UserProfile extends StatelessWidget {
                           : 'Email'),
                     ),
                   ),
-                  ListTile(
-                    leading: Icon(FlutterIcons.phone_mco),
-                    title: !pc.editing.value
-                        ? Text(pc.currentUser.value.phoneNumber ?? 'pending')
-                        : TextFormField(
-                            controller: pc.phoneController,
-                            validator: pc.phoneValidator,
-                          ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(pc.editing.value
-                          ? 'OTP will be sent, Enter OTP to change Number'
-                          : 'Phone Number'),
-                    ),
-                    trailing: pc.editing.value
-                        ? TextButton(
-                            onPressed:
-                                pc.otpSent.value ? pc.checkOtp : pc.sendOtp,
-                            child: Text(
-                                pc.otpSent.value ? 'Check OTP' : 'Send OTP'))
-                        : Text(''),
-                  ),
-                  !pc.editing.value
-                      ? ListTile(
-                          leading: Icon(FlutterIcons.dollar_faw),
-                          title: Text('Order History'),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text('View All of your previous orders'),
-                          ),
-                        )
-                      : Text(''),
+                  // ListTile(
+                  //   leading: Icon(FlutterIcons.phone_mco),
+                  //   title: !pc.editing.value
+                  //       ? Text(pc.currentUser.value.phoneNumber ?? 'pending')
+                  //       : TextFormField(
+                  //           controller: pc.phoneController,
+                  //           validator: pc.phoneValidator,
+                  //         ),
+                  //   subtitle: Padding(
+                  //     padding: const EdgeInsets.only(top: 8.0),
+                  //     child: Text(pc.editing.value
+                  //         ? 'OTP will be sent, Enter OTP to change Number'
+                  //         : 'Phone Number'),
+                  //   ),
+                  //   trailing: pc.editing.value
+                  //       ? TextButton(
+                  //           onPressed:
+                  //               pc.otpSent.value ? pc.checkOtp : pc.sendOtp,
+                  //           child: Text(
+                  //               pc.otpSent.value ? 'Check OTP' : 'Send OTP'))
+                  //       : Text(''),
+                  // ),
+
                   !pc.editing.value
                       ? ListTile(
                           leading: Icon(FlutterIcons.theme_light_dark_mco),

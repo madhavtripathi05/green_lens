@@ -17,7 +17,7 @@ class IntroView extends StatelessWidget {
             child: Column(
               children: [
                 Image.asset(
-                  'assets/images/logo.png',
+                  'assets/images/icon.png',
                   height: 150,
                 ).paddingOnly(top: 30),
                 SizedBox.fromSize(
