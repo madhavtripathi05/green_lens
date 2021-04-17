@@ -50,45 +50,52 @@ class WeatherWidget extends StatelessWidget {
             ),
             padding: EdgeInsets.all(10),
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            ValueTile("wind speed", '${this.weather.windSpeed} m/s'),
-            Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15),
-              child: Center(
-                  child: Container(
-                width: 1,
-                height: 30,
-                color: Get.theme.primaryColor.withAlpha(50),
-              )),
-            ),
-            ValueTile(
-                "sunrise",
-                DateFormat('h:m a').format(DateTime.fromMillisecondsSinceEpoch(
-                    this.weather.sunrise * 1000))),
-            Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15),
-              child: Center(
-                  child: Container(
-                width: 1,
-                height: 30,
-                color: Get.theme.primaryColor.withAlpha(50),
-              )),
-            ),
-            ValueTile(
-                "sunset",
-                DateFormat('h:m a').format(DateTime.fromMillisecondsSinceEpoch(
-                    this.weather.sunset * 1000))),
-            Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15),
-              child: Center(
-                  child: Container(
-                width: 1,
-                height: 30,
-                color: Get.theme.primaryColor.withAlpha(50),
-              )),
-            ),
-            ValueTile("humidity", '${this.weather.humidity}%'),
-          ]),
+          Container(
+            height: 50,
+            width: Get.width,
+            child:
+                ListView(scrollDirection: Axis.horizontal, children: <Widget>[
+              ValueTile("wind speed", '${this.weather.windSpeed} m/s'),
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Center(
+                    child: Container(
+                  width: 1,
+                  height: 30,
+                  color: Get.theme.primaryColor.withAlpha(50),
+                )),
+              ),
+              ValueTile(
+                  "sunrise",
+                  DateFormat('h:m a').format(
+                      DateTime.fromMillisecondsSinceEpoch(
+                          this.weather.sunrise * 1000))),
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Center(
+                    child: Container(
+                  width: 1,
+                  height: 30,
+                  color: Get.theme.primaryColor.withAlpha(50),
+                )),
+              ),
+              ValueTile(
+                  "sunset",
+                  DateFormat('h:m a').format(
+                      DateTime.fromMillisecondsSinceEpoch(
+                          this.weather.sunset * 1000))),
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Center(
+                    child: Container(
+                  width: 1,
+                  height: 30,
+                  color: Get.theme.primaryColor.withAlpha(50),
+                )),
+              ),
+              ValueTile("humidity", '${this.weather.humidity}%'),
+            ]),
+          ),
         ],
       ),
     );

@@ -18,6 +18,7 @@ class Dashboard extends StatelessWidget {
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: [
+          SizedBox(height: 10),
           Text(
             'Green Lens',
             style: TextStyle(
@@ -46,7 +47,7 @@ class WeatherCard extends StatelessWidget {
             elevation: 5,
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Container(
-                padding: EdgeInsets.symmetric(vertical: 20),
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 child: WeatherWidget(weather: dc.weather.value)))));
   }
 }

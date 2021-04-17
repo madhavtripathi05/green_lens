@@ -33,7 +33,7 @@ class ValueTile extends StatelessWidget {
               )
             : EmptyWidget(),
         SizedBox(
-          height: 10,
+          height: 4,
         ),
         Text(
           this.value,
