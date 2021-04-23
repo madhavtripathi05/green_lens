@@ -5,7 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:green_lens/app/models/crop.dart';
 import 'package:green_lens/app/modules/home/controllers/dashboard_controller.dart';
 import 'package:get/get.dart';
+import 'package:green_lens/app/modules/home/views/diseases_view.dart';
 import 'package:green_lens/app/modules/home/views/widgets/weather_widget.dart';
+
+import 'disease_details.dart';
 
 var dc = DashboardController.to;
 
@@ -123,35 +126,35 @@ class PredictionCard extends StatelessWidget {
                             Column(
                               children: [
                                 Text(
-                                  dc.results.value == ''
+                                  dc.result.value == ''
                                       ? 'Enter a valid image'
                                       : 'Condition of ${dc.selected.value.title == 'Strawberry' ? 'crop' : dc.selected.value.title} is',
                                   softWrap: true,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
-                                      color: dc.results.value
+                                      color: dc.result.value
                                               .toLowerCase()
                                               .contains('healthy')
                                           ? Colors.green
                                           : Colors.redAccent),
                                 ),
-                                if (dc.results.value != '')
+                                if (dc.result.value != '')
                                   Text(
-                                    dc.results.value,
+                                    dc.result.value,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
-                                        color: dc.results.value
+                                        color: dc.result.value
                                                 .toLowerCase()
                                                 .contains('healthy')
                                             ? Colors.green
                                             : Colors.redAccent),
                                   ).paddingOnly(bottom: 10),
-                                if (!dc.results.value
+                                if (!dc.result.value
                                         .toLowerCase()
                                         .contains('healthy') &&
-                                    dc.results.value != '')
+                                    dc.result.value != '')
                                   OutlinedButton.icon(
                                     style: ButtonStyle(overlayColor:
                                         MaterialStateProperty.resolveWith<
@@ -163,7 +166,11 @@ class PredictionCard extends StatelessWidget {
                                       }
                                       return Colors.transparent;
                                     })),
-                                    onPressed: () {},
+                                    onPressed: () =>
+                                        Get.to(() => DiseaseDetails(
+                                              plant: dc.selected.value.id,
+                                              disease: dc.result.value,
+                                            )),
                                     icon: Icon(FlutterIcons.healing_mdi,
                                         color: Colors.deepOrangeAccent),
                                     label: Text(
@@ -393,7 +400,8 @@ class CropCard extends StatelessWidget {
                     child: InkWell(
                       splashColor:
                           dc.fromHex(dc.selected.value.color).withOpacity(0.3),
-                      onTap: () {},
+                      onTap: () => Get.to(
+                          () => DiseasesView(plant: dc.selected.value.id)),
                       child: Container(
                         height: 100,
                         width: Get.width * 0.4,
@@ -457,7 +465,7 @@ class CropWidget extends StatelessWidget {
                         margin: EdgeInsets.all(10),
                         child: CircleAvatar(
                           backgroundColor: Get.isDarkMode
-                              ? Get.theme.scaffoldBackgroundColor
+                              ? Get.theme.cardColor
                               : Colors.white,
                           child: Image.asset(
                             crop.imageUrl,

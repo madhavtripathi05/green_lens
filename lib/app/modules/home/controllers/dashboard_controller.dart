@@ -70,7 +70,7 @@ class DashboardController extends GetxController {
   RxBool imageSelected = false.obs;
   RxBool weatherLoaded = false.obs;
 
-  RxString results = ''.obs;
+  RxString result = ''.obs;
   RxString cityName = ''.obs;
 
   Rx<Weather> weather = Weather().obs;
@@ -147,10 +147,10 @@ class DashboardController extends GetxController {
     print('predicting');
     submitting.value = true;
 
-    results.value = jsonDecode(
+    result.value = jsonDecode(
         await DBService().predict(image, selected.value.id))['prediction'];
     submitting.value = false;
-    print(results.value);
+    print(result.value);
   }
 
   void _showLocationDeniedDialog() {
@@ -229,4 +229,5 @@ class DashboardController extends GetxController {
     await fetchWeatherWithLocation();
     super.onInit();
   }
+  //assets/images/test/apple/Apple Scab.JPG
 }
