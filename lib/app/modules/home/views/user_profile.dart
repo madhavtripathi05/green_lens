@@ -103,7 +103,7 @@ class UserProfile extends StatelessWidget {
                   ListTile(
                     leading: Icon(FlutterIcons.email_mco),
                     title: !pc.editing.value
-                        ? Text(pc.currentUser.value.email)
+                        ? Text(pc.currentUser.value.email??'Pending')
                         : TextFormField(
                             controller: pc.emailController,
                             validator: pc.emailValidator,

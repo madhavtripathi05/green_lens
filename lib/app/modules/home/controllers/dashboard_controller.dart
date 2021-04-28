@@ -129,6 +129,7 @@ class DashboardController extends GetxController {
                     groupValue: selected.value,
                     onChanged: (crop) {
                       selected.value = crop;
+                      image = null;
                       scrollController.animateTo(95.0 * idx,
                           duration: Duration(milliseconds: 300),
                           curve: Curves.decelerate);
@@ -229,5 +230,4 @@ class DashboardController extends GetxController {
     await fetchWeatherWithLocation();
     super.onInit();
   }
-  //assets/images/test/apple/Apple Scab.JPG
 }
